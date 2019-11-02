@@ -110,11 +110,6 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
     cv::Mat twc = -Rwc*(kf->GetTranslation());
     vector<float> q = Converter::toQuaternion(Rwc);
 
-    //kf->GetPose() Tcw
-    // cv::Mat  TWC = kf->GetPose().inv();  
-	// cv::Mat Rwc = TWC.rowRange(0,3).colRange(0,3);  
-	// cv::Mat twc = TWC.rowRange(0,3).col(3);
-    // vector<float> q = Converter::toQuaternion(Rwc);
  
     rmd::SE3<float> T_world_curr(q[3], q[0], q[1], q[2], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
 
@@ -133,11 +128,6 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
         cv::Mat Rwc = Tcw.rowRange(0,3).colRange(0,3).t();
         cv::Mat twc = -Rwc*Tcw.rowRange(0,3).col(3);
         vector<float> q = Converter::toQuaternion(Rwc);
-
-        // TWC = Tcw.inv();
-        // cv::Mat Rwc = TWC.rowRange(0,3).colRange(0,3);  
-        // cv::Mat twc = TWC.rowRange(0,3).col(3);
-        // vector<float> q = Converter::toQuaternion(Rwc);
 
         rmd::SE3<float> T_world_curr(q[3], q[0], q[1], q[2], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
         cv::Mat img = colorImgs_previous[i];
