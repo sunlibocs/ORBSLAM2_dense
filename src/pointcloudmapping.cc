@@ -105,26 +105,24 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
     
     double min_depth = 0.8, max_depth=6;
 
-    //cv::Mat Tcw = kf->Tcw;
+    //这里是把相机的点转向世界的矩阵
     cv::Mat Rwc = (kf->GetRotation()).t();
     cv::Mat twc = -Rwc*(kf->GetTranslation());
     vector<float> q = Converter::toQuaternion(Rwc);
 
-
-    //这里是把相机的点转向世界的矩阵
-    // cv::Mat R = kf->GetRotation().t();
-    // vector<float> q = Converter::toQuaternion(R);
-    // cv::Mat t = kf->GetCameraCenter();
-    rmd::SE3<float> T_world_curr(q[0], q[1], q[2], q[3], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
+    //kf->GetPose() Tcw
+    // cv::Mat  TWC = kf->GetPose().inv();  
+	// cv::Mat Rwc = TWC.rowRange(0,3).colRange(0,3);  
+	// cv::Mat twc = TWC.rowRange(0,3).col(3);
+    // vector<float> q = Converter::toQuaternion(Rwc);
+ 
+    rmd::SE3<float> T_world_curr(q[3], q[0], q[1], q[2], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
 
     cout << "T_world_curr: " << endl << T_world_curr<< endl;
     cout << twc.at<float>(0) << "//" << twc.at<float>(1)  << "//" << twc.at<float>(2)  << endl;
 
     depthmap.setReferenceImage(color, T_world_curr.inv(), min_depth, max_depth);
 
-    // f << setprecision(6) << kf->mTimeStamp << setprecision(7) << " " << t.at<float>(0) << " " << t.at<float>(1) << " " << t.at<float>(2)
-    //       << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
-    
     cv::imshow("keyframeImge", color);
     cv::waitKey(10);
     //for(int i = colorImgs_previous.size() - 1; i > 0; i--)
@@ -135,8 +133,13 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
         cv::Mat Rwc = Tcw.rowRange(0,3).colRange(0,3).t();
         cv::Mat twc = -Rwc*Tcw.rowRange(0,3).col(3);
         vector<float> q = Converter::toQuaternion(Rwc);
-        rmd::SE3<float> T_world_curr(q[0], q[1], q[2], q[3], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
 
+        // TWC = Tcw.inv();
+        // cv::Mat Rwc = TWC.rowRange(0,3).colRange(0,3);  
+        // cv::Mat twc = TWC.rowRange(0,3).col(3);
+        // vector<float> q = Converter::toQuaternion(Rwc);
+
+        rmd::SE3<float> T_world_curr(q[3], q[0], q[1], q[2], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
         cv::Mat img = colorImgs_previous[i];
         double t = (double)cv::getTickCount();
         depthmap.update(img, T_world_curr.inv());
@@ -145,14 +148,12 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
         update_time.push_back(t);
 
         // 在这里输出一下深度图
-        depthmap.downloadDenoisedDepthmap(0.5f, 200);
+        depthmap.downloadDenoisedDepthmap(0.5f, 6);
         cv::Mat denoised_result = depthmap.getDepthmap();
         cv::Mat colored_denoised = rmd::Depthmap::scaleMat(denoised_result);
         cv::imshow("denoised_depth", colored_denoised);
         cv::imshow("current", img);
         cv::waitKey(10);
-        getchar();
-        //printf("*****\n");
     }
 }
 
