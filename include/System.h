@@ -115,6 +115,8 @@ public:
     // SaveMap(const string &filename);
     // LoadMap(const string &filename);
 
+    cv::Mat K;
+
 private:
 
     // Input sensor

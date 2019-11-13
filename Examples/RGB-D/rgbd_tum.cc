@@ -78,7 +78,12 @@ int main(int argc, char **argv)
     {
         // Read image and depthmap from file
         imRGB = cv::imread(string(argv[3])+"/"+vstrImageFilenamesRGB[ni],CV_LOAD_IMAGE_UNCHANGED);
+        
         imD = cv::imread(string(argv[3])+"/"+vstrImageFilenamesD[ni],CV_LOAD_IMAGE_UNCHANGED);
+        ///home/slbs/Desktop/CSPN/output/nyu_pretrain_cspn_1_net_cp500_bs8_adlr_ep40/eval_result
+
+        //imD = cv::imread("/home/slbs/Desktop/CSPN/output/nyu_pretrain_cspn_1_net_cp500_bs8_adlr_ep40/eval_result/"+vstrImageFilenamesD[ni],CV_LOAD_IMAGE_UNCHANGED);
+
         double tframe = vTimestamps[ni];
 
         if(imRGB.empty())
@@ -160,6 +165,8 @@ void LoadImages(const string &strAssociationFilename, vector<string> &vstrImageF
             vstrImageFilenamesRGB.push_back(sRGB);
             ss >> t;
             ss >> sD;
+            ///home/slbs/Desktop/CSPN/output/nyu_pretrain_cspn_1_net_cp500_bs8_adlr_ep40/eval_result
+
             vstrImageFilenamesD.push_back(sD);
 
         }

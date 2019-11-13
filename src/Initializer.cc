@@ -799,6 +799,10 @@ int Initializer::CheckRT(const cv::Mat &R, const cv::Mat &t, const vector<cv::Ke
                        const vector<Match> &vMatches12, vector<bool> &vbMatchesInliers,
                        const cv::Mat &K, vector<cv::Point3f> &vP3D, float th2, vector<bool> &vbGood, float &parallax)
 {
+    //  cout <<"th2" << th2 << endl;
+    //     getchar();
+
+
     // Calibration parameters
     const float fx = K.at<float>(0,0);
     const float fy = K.at<float>(1,1);
@@ -838,6 +842,10 @@ int Initializer::CheckRT(const cv::Mat &R, const cv::Mat &t, const vector<cv::Ke
 
         Triangulate(kp1,kp2,P1,P2,p3dC1);
 
+        
+        // cout << "p3dC1.at<float>(2)=" << p3dC1.at<float>(2) << endl;
+        // getchar();
+
         if(!isfinite(p3dC1.at<float>(0)) || !isfinite(p3dC1.at<float>(1)) || !isfinite(p3dC1.at<float>(2)))
         {
             vbGood[vMatches12[i].first]=false;
@@ -873,6 +881,7 @@ int Initializer::CheckRT(const cv::Mat &R, const cv::Mat &t, const vector<cv::Ke
 
         if(squareError1>th2)
             continue;
+
 
         // Check reprojection error in second image
         float im2x, im2y;

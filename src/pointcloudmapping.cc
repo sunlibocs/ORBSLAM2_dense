@@ -71,7 +71,7 @@ void PointCloudMapping::insertFrame(cv::Mat color, cv::Mat mTcw){
     //cout << "insert frame1" << endl;
     //assert colorImgs_previous.size() == mTcw_vec.size();
     //保存下来用于更新深度 TODO 可能太多撑爆内存 这里强行保存最近的五十张
-    if(colorImgs_previous.size() > 50){
+    if(colorImgs_previous.size() > 10){
         colorImgs_previous.erase(colorImgs_previous.begin());
         mTcw_vec.erase(mTcw_vec.begin());
     }
@@ -103,7 +103,7 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
     
     //SE3(Type qw, Type qx, Type qy, Type qz, Type tx, Type ty, Type tz)
     
-    double min_depth = 0.8, max_depth=6;
+    double min_depth = 0.6, max_depth=0.6;
 
     //这里是把相机的点转向世界的矩阵
     cv::Mat Rwc = (kf->GetRotation()).t();
@@ -112,7 +112,8 @@ void PointCloudMapping::update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color){
 
  
     rmd::SE3<float> T_world_curr(q[3], q[0], q[1], q[2], twc.at<float>(0), twc.at<float>(1), twc.at<float>(2));
-
+    
+    
     cout << "T_world_curr: " << endl << T_world_curr<< endl;
     cout << twc.at<float>(0) << "//" << twc.at<float>(1)  << "//" << twc.at<float>(2)  << endl;
 
@@ -156,12 +157,12 @@ void PointCloudMapping::insertKeyFrame(KeyFrame* kf, cv::Mat& color, cv::Mat& de
     keyframes.push_back( kf );
     //cout << "color push_back" << endl;
     colorImgs.push_back( color.clone() );
-    cout << "depth push_back" << endl;
+    // cout << "depth push_back" << endl;
 
-    //在通知之前先把深度估计出来 TODO 删掉没啥用的
-    update_KeyFrameDepth(kf, color);
+    // //在通知之前先把深度估计出来 TODO 删掉没啥用的
+    // update_KeyFrameDepth(kf, color);
 
-    cout << "depth push_back" << endl;
+    // cout << "depth push_back" << endl;
 
     depthImgs.push_back( depth.clone() );
     
@@ -197,7 +198,7 @@ pcl::PointCloud< PointCloudMapping::PointT >::Ptr PointCloudMapping::generatePoi
     pcl::transformPointCloud( *tmp, *cloud, T.inverse().matrix());
     cloud->is_dense = false;
     
-    cout<<"generate point cloud for kf "<<kf->mnId<<", size="<<cloud->points.size()<<endl;
+    //cout<<"generate point cloud for kf "<<kf->mnId<<", size="<<cloud->points.size()<<endl;
     return cloud;
 }
 

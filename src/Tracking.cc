@@ -374,6 +374,7 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 
     Track();
 
+
     return mCurrentFrame.mTcw.clone();
 }
 
@@ -622,6 +623,7 @@ void Tracking::Track()
         mlFrameTimes.push_back(mlFrameTimes.back());
         mlbLost.push_back(mState==LOST);
     }
+
 
 }
 
@@ -1717,6 +1719,11 @@ void Tracking::ChangeCalibration(const string &strSettingPath)
 void Tracking::InformOnlyTracking(const bool &flag)
 {
     mbOnlyTracking = flag;
+}
+
+cv::Mat Tracking::getK()
+{
+    return  mK;
 }
 
 

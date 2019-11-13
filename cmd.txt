@@ -8,10 +8,11 @@
 
 
 
+./../Examples/Monocular/mono_kitti ../Vocabulary/ORBvoc.txt ../Examples/Monocular/KITTI03.yaml /media/slbs/DATA/03
 
 
-//gaoxiang
-./../bin/rgbd_tum ../Vocabulary/ORBvoc.txt ../Examples/RGB-D/TUM2.yaml /home/slbs/Downloads/rgbd_dataset_freiburg2_xyz /home/slbs/Downloads/rgbd_dataset_freiburg2_xyz/fr2_xyz.txt
+
+./../Examples/Monocular/mono_kitti ../Vocabulary/ORBvoc.txt ../Examples/Monocular/KITTI04-12.yaml /media/slbs/DATA/04
 
 
-./../bin/rgbd_tum ../Vocabulary/ORBvoc.txt ../Examples/RGB-D/TUM1.yaml /home/slbs/Downloads/rgbd_dataset_freiburg1_desk /home/slbs/Downloads/rgbd_dataset_freiburg1_desk/fr1_desk.txt
+./../Examples/RGB-D/rgbd_tum ../Vocabulary/ORBvoc.txt ../Examples/RGB-D/TUM1.yaml /home/slbs/Downloads/rgbd_dataset_freiburg1_xyz /home/slbs/Downloads/rgbd_dataset_freiburg1_xyz/fr1_xyz.txt

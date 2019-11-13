@@ -98,6 +98,7 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     mpPointCloudMapping = make_shared<PointCloudMapping>( resolution );
     mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer, mpMapDrawer,
                              mpMap, mpPointCloudMapping, mpKeyFrameDatabase, strSettingsFile, mSensor);
+    K = mpTracker->getK();
     //mpTracker = new Tracking(this, mpVocabulary, mpFrameDrawer, mpMapDrawer,
     //                         mpMap, mpKeyFrameDatabase, strSettingsFile, mSensor);
 
@@ -351,6 +352,7 @@ void System::SaveTrajectoryTUM(const string &filename)
 
         vector<float> q = Converter::toQuaternion(Rwc);
 
+
         f << setprecision(6) << *lT << " " <<  setprecision(9) << twc.at<float>(0) << " " << twc.at<float>(1) << " " << twc.at<float>(2) << " " << q[0] << " " << q[1] << " " << q[2] << " " << q[3] << endl;
     }
     f.close();
@@ -451,3 +453,4 @@ void System::SaveTrajectoryKITTI(const string &filename)
 }
 
 } //namespace ORB_SLAM
+
