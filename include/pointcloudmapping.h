@@ -38,17 +38,21 @@ public:
     PointCloudMapping( double resolution_ );
     
     // 插入一个keyframe，会更新一次地图
-    void insertKeyFrame( KeyFrame* kf, cv::Mat& color, cv::Mat& depth );
+    void insertKeyFrame( KeyFrame* kf, cv::Mat& color, cv::Mat& depth, Frame pre_frame);
 
     void insertFrame(cv::Mat color, cv::Mat mTcw);
     void update_KeyFrameDepth(KeyFrame* kf, cv::Mat& color);
+
+    //使用光流计算图像深度
+    void update_KeyFrameDepth_UsingFlow(KeyFrame* kf, Frame pre_frame, cv::Mat& im, cv::Mat& depthMap);
 
 
     void shutdown();
     void viewer();
     
 protected:
-    PointCloud::Ptr generatePointCloud(KeyFrame* kf, cv::Mat& color, cv::Mat& depth);
+    //添加一个N参数
+    PointCloud::Ptr generatePointCloud(KeyFrame* kf, cv::Mat& color, cv::Mat& depth, unsigned int);
     
     PointCloud::Ptr globalMap;
     shared_ptr<thread>  viewerThread;   

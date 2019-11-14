@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
         // Pass the image to the SLAM system
         //return mCurrentFrame.mTcw.clone();
-
+        //这里每一次进去,都会创建一个frame,这个frame的ID也是从0开始
         cv::Mat Tcw = SLAM.TrackMonocular(im,tframe);
 
 
@@ -126,13 +126,13 @@ int main(int argc, char **argv)
 
 
         //强行认为100张以后已经完成了初始化
-        if(ni == 15){
+        if(ni == 15000000){
             //T1w = Tcw;
             Tcw.copyTo(T1w);
             img_pre= im;
         }
 
-        if(ni > 15){
+        if(ni > 15000000){
 
 
             cv::Mat T2w = Tcw;
@@ -211,7 +211,6 @@ int main(int argc, char **argv)
             //        
             //     }
             // }
-
 
             ifstream file_x;//创建文件流对象
             file_x.open(x_str);
@@ -338,7 +337,7 @@ int main(int argc, char **argv)
                     // cout << "set z -depth: " << z << endl;
 
                     // 使用ORB
-                    z = z * 10;
+                    //z = z * 10;
 
                     //if(z<0) z = 0;
                     if(z<0) z = 255;
@@ -391,7 +390,8 @@ int main(int argc, char **argv)
             file_x.close();
             file_y.close();
 
-            
+            //可视化*************************************************************
+
             double min; 
             double max; 
            
@@ -423,21 +423,8 @@ int main(int argc, char **argv)
             cv::imshow("img_pre", img_pre);
             cv::imshow("img_cur", im);
               
-            cv::waitKey(10);
-            getchar();
-            // // Camera 1 Projection Matrix K[I|0]
-            // cv::Mat P1(3,4,CV_32F,cv::Scalar(0));
-            // K.copyTo(P1.rowRange(0,3).colRange(0,3));
 
-            // // Camera 2 Projection Matrix K[R|t]
-            // cv::Mat P2(3,4,CV_32F);
-            // R.copyTo(P2.rowRange(0,3).colRange(0,3));
-            // t.copyTo(P2.rowRange(0,3).col(3));
-            // P2 = K*P2;
-
-            //Triangulate(kp1,kp2,P1,P2,p3dC1);
-
-            
+            //可视化*************************************************************
 
             //赋值给之前的帧
             img_pre = im;

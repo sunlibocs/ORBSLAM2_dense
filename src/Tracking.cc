@@ -352,6 +352,9 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 {
     mImGray = im;
 
+    //TODO 释放掉
+    mImRGB = im.clone();
+
     if(mImGray.channels()==3)
     {
         if(mbRGB)
@@ -612,7 +615,7 @@ void Tracking::Track()
         
         
         //添加到map中用于进行深度滤波 TODO
-        mpPointCloudMapping->insertFrame((this->mImRGB).clone(), (mCurrentFrame.mTcw).clone());
+        //mpPointCloudMapping->insertFrame((this->mImRGB).clone(), (mCurrentFrame.mTcw).clone());
 
     }
     else
@@ -1271,8 +1274,8 @@ void Tracking::CreateNewKeyFrame()
 
     mpLocalMapper->SetNotStop(false);
    
-    // TO DO
-    mpPointCloudMapping->insertKeyFrame( pKF, this->mImRGB, this->mImDepth );
+    // TO DO 
+    mpPointCloudMapping->insertKeyFrame( pKF, this->mImRGB, this->mImDepth, Frame(this->mLastFrame));
 
     mnLastKeyFrameId = mCurrentFrame.mnId;
     mpLastKeyFrame = pKF;
